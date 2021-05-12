@@ -2222,6 +2222,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var marker;
@@ -2229,9 +2257,77 @@ var i = 0;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      path: [{
+        lat: 53.462658772581754,
+        lng: -2.250049734216737
+      }, {
+        lat: 53.46258212400539,
+        lng: -2.249996090036439
+      }, {
+        lat: 53.462505475290655,
+        lng: -2.249953174692201
+      }, {
+        lat: 53.46242882643754,
+        lng: -2.249910259347963
+      }, {
+        lat: 53.462352177446014,
+        lng: -2.249867344003724
+      }, {
+        lat: 53.46226914088241,
+        lng: -2.249813699823426
+      }, {
+        lat: 53.462218041377895,
+        lng: -2.249792242151307
+      }, {
+        lat: 53.46216055436182,
+        lng: -2.249760055643129
+      }, {
+        lat: 53.46209667980822,
+        lng: -2.249706411462831
+      }, {
+        lat: 53.46204558009619,
+        lng: -2.249674224954652
+      }, {
+        lat: 53.46200725527173,
+        lng: -2.249642038446473
+      }, {
+        lat: 53.46196893041272,
+        lng: -2.249609851938295
+      }, {
+        lat: 53.46198856705823,
+        lng: -2.249551644815013
+      }, {
+        lat: 53.461999745140524,
+        lng: -2.249508729470775
+      }, {
+        lat: 53.46200852791738,
+        lng: -2.249444356454418
+      }, {
+        lat: 53.462018907560434,
+        lng: -2.249409487737224
+      }, {
+        lat: 53.46203008563473,
+        lng: -2.249366572392986
+      }, {
+        lat: 53.46204286057318,
+        lng: -2.249310246003673
+      }, {
+        lat: 53.46205563550777,
+        lng: -2.249279400600002
+      }, {
+        lat: 53.46206681357241,
+        lng: -2.249228438628719
+      }, {
+        lat: 53.462073999469524,
+        lng: -2.249194911016033
+      }],
+      polylineOptions: {
+        strokeColor: 'black'
+      },
       markers: [],
       mapStyle: [],
       carIcon: '/images/car.png',
+      whiteCarIcon: '/images/car-white.png',
       dayStyle: {
         styles: [[]]
       },
@@ -2243,7 +2339,9 @@ var i = 0;
         lat: 53.46260769183019,
         lng: -2.250012352001368
       },
-      nightOn: false
+      nightOn: false,
+      isCarWindowOpened: false,
+      carInfoWindow: 'Driver'
     };
   },
   mounted: function mounted() {
@@ -2253,11 +2351,13 @@ var i = 0;
       _this.initSlidingMarker(_this.$refs.mapRef.$mapObject);
     });
     this.moveCar();
+    this.animatePolyline();
   },
   methods: {
     changeMapStyle: function changeMapStyle() {
       this.nightOn = !this.nightOn;
       this.mapStyle = this.nightOn ? _json_nightStyle_json__WEBPACK_IMPORTED_MODULE_1__ : this.dayStyle;
+      marker.setIcon(this.nightOn ? this.whiteCarIcon : this.carIcon);
     },
     initSlidingMarker: function initSlidingMarker(map) {
       var SlidingMarker = __webpack_require__(/*! marker-animate-unobtrusive */ "./node_modules/marker-animate-unobtrusive/SlidingMarker.js");
@@ -2276,6 +2376,7 @@ var i = 0;
         var toLat = _json_data_json__WEBPACK_IMPORTED_MODULE_0__.features[i].geometry.coordinates[1];
         var toLng = _json_data_json__WEBPACK_IMPORTED_MODULE_0__.features[i].geometry.coordinates[0];
         var bearing = v.$bearing(v.carLocation.lat, v.carLocation.lng, toLat, toLng);
+        var distance = v.$distance(v.carLocation.lat, v.carLocation.lng, toLat, toLng);
         v.carLocation = {
           lat: toLat,
           lng: toLng
@@ -2283,9 +2384,39 @@ var i = 0;
         marker.setEasing('linear');
         marker.setPosition(v.carLocation);
         $('img[src*="car.png"]').css('transform', 'rotate(' + bearing + 'deg)');
+        $('img[src*="car-white.png"]').css('transform', 'rotate(' + bearing + 'deg)');
+
+        if (distance <= 3) {
+          v.isCarWindowOpened = true;
+          v.carInfoWindow = "Drive Here";
+        }
+
         i += 1;
         v.moveCar();
       }, 1000);
+    },
+    animatePolyline: function animatePolyline() {
+      var isPolylineBlack = true;
+      var currentOptions;
+      var v = this;
+
+      function togglePolyline() {
+        if (isPolylineBlack) {
+          currentOptions = {
+            strokeColor: 'gray'
+          };
+          isPolylineBlack = false;
+        } else {
+          currentOptions = {
+            strokeColor: 'black'
+          };
+          isPolylineBlack = true;
+        }
+
+        v.polylineOptions = currentOptions;
+      }
+
+      setInterval(togglePolyline, 1000);
     }
   }
 });
@@ -41432,7 +41563,54 @@ var render = function() {
             options: _vm.mapStyle
           }
         },
-        [_c("GmapMarker", { attrs: { position: _vm.center } })],
+        [
+          _c("GmapMarker", { attrs: { position: _vm.center } }),
+          _vm._v(" "),
+          _c(
+            "gmap-info-window",
+            {
+              attrs: {
+                opened: "true,",
+                position: _vm.center,
+                options: {
+                  pixelOffset: {
+                    width: 0,
+                    height: -35
+                  }
+                }
+              }
+            },
+            [_vm._v("\n        Home\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "gmap-info-window",
+            {
+              attrs: {
+                opened: _vm.isCarWindowOpened,
+                position: _vm.carLocation,
+                options: {
+                  pixelOffset: {
+                    width: 0,
+                    height: -35
+                  }
+                }
+              }
+            },
+            [
+              _vm._v(
+                "\n            " + _vm._s(_vm.carInfoWindow) + "\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm.path.length > 0
+            ? _c("gmap-polyline", {
+                ref: "polyline",
+                attrs: { path: _vm.path, options: _vm.polylineOptions }
+              })
+            : _vm._e()
+        ],
         1
       )
     ],
