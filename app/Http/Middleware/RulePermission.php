@@ -14,8 +14,12 @@ class RulePermission
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $permission)
     {
+        if(!$request->user()->hasPermission($permission)) {
+            abort(403);
+        }
+
         return $next($request);
     }
 }

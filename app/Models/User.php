@@ -42,15 +42,33 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function basket() {
+    public function basket()
+    {
         return $this->hasMany(Basket::class);
     }
 
     public function getBasketTotal()
     {
-        return $this->basket->sum(function($item) {
-           return $item->qty * $item->price;
+        return $this->basket->sum(function ($item) {
+            return $item->qty * $item->price;
         });
+    }
+
+    public function permissions()
+    {
+        return $this->hasManyThrough(
+            Permission::class,
+            UserPermission::class,
+            'user_id',
+            'id',
+            'id',
+            'permission_id'
+        );
+    }
+
+    public function hasPermission($permission)
+    {
+        return in_array($permission, $this->permissions->pluck('name')->toArray()); //is rule in user permission
     }
 
 }

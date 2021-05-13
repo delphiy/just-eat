@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -100,7 +98,7 @@
                             <a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-file-empty"></i> <span>Restaurants</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
                             <div id="subPages" class="collapse ">
                                 <ul class="nav">
-                                    <li><a href="page-profile.html" class="">View List</a></li>
+                                    <li><a href="{{ route('restaurant.index') }}" class="">View List</a></li>
                                 </ul>
                             </div>
                         </li>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminRestaurantController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
@@ -50,8 +51,14 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 
 //Admin
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'web']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'rule:restaurants']], function() {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
+    //Restaurants
+    Route::get('/restaurant', [AdminRestaurantController::class, 'index'])->name('restaurant.index');
+    Route::get('/restaurant/create', [AdminRestaurantController::class, 'create'])->name('restaurant.create');
+    Route::post('/restaurant', [AdminRestaurantController::class, 'store'])->name('restaurant.store');
+    Route::get('/{restaurant}/edit', [AdminRestaurantController::class, 'edit'])->name('restaurant.edit');
+    Route::PATCH('/restaurant/{restaurant}', [AdminRestaurantController::class, 'update'])->name('restaurant.update');
 });
 
