@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
@@ -45,5 +46,12 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     //Account
     Route::get('/account', [UserController::class, 'myAccount'])->name('my-account');
     Route::get('/track-order', [UserController::class, 'trackOrder'])->name('my-account');
+});
+
+//Admin
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'web']], function() {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 });
+
