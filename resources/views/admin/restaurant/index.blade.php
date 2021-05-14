@@ -14,9 +14,11 @@
                             <div class="col-md-12">
                                 <div class="panel">
                                     <div class="panel-heading">
+                                        @if($message = Session::get('success'))
                                         <div class="alert alert-success">
-                                            <p></p>
+                                            <p> {{ $message }} </p>
                                         </div>
+                                       @endif
                                     </div>
 
                                     <div class="panel-body">
@@ -40,8 +42,10 @@
                                                     <td> {{ $restaurant->postcode }} </td>
                                                     <td> {{ $restaurant->lat }} , {{ $restaurant->lng }}</td>
                                                     <td>
-                                                        <form action="" method="POST">
-                                                            <a href="" class="btn btn-primary">Edit</a>
+                                                        <form action="{{ route('restaurant.destroy', [$restaurant->id]) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a href="{{ route('restaurant.edit', [$restaurant->id]) }}" class="btn btn-primary">Edit</a>
                                                             <button type="submit" class="btn btn-danger">Delete</button>
                                                         </form>
                                                     </td>

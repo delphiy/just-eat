@@ -60,5 +60,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'rule:restaurants']]
     Route::post('/restaurant', [AdminRestaurantController::class, 'store'])->name('restaurant.store');
     Route::get('/{restaurant}/edit', [AdminRestaurantController::class, 'edit'])->name('restaurant.edit');
     Route::PATCH('/restaurant/{restaurant}', [AdminRestaurantController::class, 'update'])->name('restaurant.update');
+    Route::DELETE('/restaurant/{restaurant}', [AdminRestaurantController::class, 'destroy'])->name('restaurant.destroy');
 });
 
